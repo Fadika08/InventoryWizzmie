@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Category extends Model
+{
+    protected $fillable = [
+        'code',
+        'name',
+        'description',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    /**
+     * Inventaris dalam kategori.
+     */
+    public function inventoryItems(): HasMany
+    {
+        return $this->hasMany(InventoryItem::class);
+    }
+
+    /**
+     * Item yang diminta dalam pengajuan.
+     */
+    public function requestItems(): HasMany
+    {
+        return $this->hasMany(InventoryRequestItem::class);
+    }
+}
