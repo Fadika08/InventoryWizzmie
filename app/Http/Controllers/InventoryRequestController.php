@@ -57,7 +57,26 @@ public function index(Request $request): View
             );
         }
 
-    } elseif ($user->isOutletAdmin()) {
+    }
+
+    elseif ($user->isDblAdmin()) {
+
+        $query->whereNull('outlet_id');
+        if ($user->department_id) {
+            $query->where(
+                'department_id',
+                $user->department_id
+            );
+        }
+        if ($user->department_id) {
+            $query->where(
+                'department_id',
+                $user->department_id
+            );
+        }
+
+    }
+    elseif ($user->isOutletAdmin()) {
 
         $query->where(
             'outlet_id',

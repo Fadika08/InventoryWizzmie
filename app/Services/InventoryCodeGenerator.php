@@ -43,6 +43,28 @@ class InventoryCodeGenerator
                 "HO-{$departmentCode}-{$categoryCode}";
         }
 
+        if ($inventory->location_type === "dbl") {
+
+            $departmentCode = strtoupper(
+                $inventory->department?->code ?? 'GEN'
+            );
+
+            $departmentCode = preg_replace(
+                '/[^A-Z0-9]/',
+                '',
+                $departmentCode
+            );
+
+            $categoryCode = preg_replace(
+                '/[^A-Z0-9]/',
+                '',
+                $categoryCode
+            );
+
+            $prefix =
+                "DBL-{$departmentCode}-{$categoryCode}";
+        }
+
 
         /*
         |--------------------------------------------------------------------------

@@ -108,6 +108,22 @@
 
                     </div>
 
+                    <div>
+                        <label for="quantity" class="mb-2 block text-sm font-semibold text-slate-700">
+                            Jumlah Barang *
+                        </label>
+
+                        <input type="number" id="quantity" name="quantity"
+                            value="{{ old('quantity', $inventory->quantity ?? 1) }}" min="0" max="4294967295"
+                            step="1" required placeholder="Contoh: 10, 25, 100"
+                            class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
+
+                        @error('quantity')
+                            <p class="mt-1 text-sm text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
 
                     <div>
 
@@ -209,7 +225,19 @@
 
                     </label>
 
+                    <label class="location-option cursor-pointer rounded-xl border-2 border-slate-200 p-4">
 
+                        <input type="radio" name="location_type" value="dbl" class="location-type sr-only"
+                            @checked(old('location_type', $inventory->location_type) === 'dbl')>
+
+                        <p class="font-semibold text-slate-800">
+                            DBL Office
+                        </p>
+
+                        <p class="mt-1 text-xs text-slate-500">
+                            Inventaris DBL.
+                        </p>
+                    </label>
                     <label class="location-option cursor-pointer rounded-xl border-2 border-slate-200 p-4">
 
                         <input type="radio" name="location_type" value="outlet" class="location-type sr-only"

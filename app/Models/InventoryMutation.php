@@ -33,6 +33,7 @@ class InventoryMutation extends Model
         'notes',
     ];
 
+
     protected $casts = [
         'requested_at' => 'datetime',
         'approved_at' => 'datetime',

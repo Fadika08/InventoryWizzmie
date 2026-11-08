@@ -76,6 +76,15 @@ Route::middleware(['auth', 'role:ho_admin'])
 
     });
 
+Route::middleware(['auth', 'role:dbl_admin'])
+    ->group(function () {
+
+        Route::get('/dbl', function () {
+            return 'DBL Admin';
+        });
+
+    });
+
 Route::middleware(['auth', 'role:outlet_admin'])
     ->group(function () {
 

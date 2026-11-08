@@ -32,6 +32,10 @@ class InventoryItemPolicy
             return $inventoryItem->location_type === 'head_office';
         }
 
+        if ($user->isDblAdmin()) {
+            return $inventoryItem->location_type === 'dbl';
+        }
+
         if ($user->isOutletAdmin()) {
             return (
                 $inventoryItem->location_type === 'outlet'
@@ -48,6 +52,7 @@ class InventoryItemPolicy
     public function create(User $user): bool
     {
         return $user->isHoAdmin()
+            || $user->isDblAdmin()
             || $user->isOutletAdmin();
     }
 

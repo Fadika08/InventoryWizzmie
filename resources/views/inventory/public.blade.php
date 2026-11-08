@@ -98,6 +98,15 @@
 
                     </div>
 
+                    <div class="rounded-xl bg-slate-50 p-4">
+                        <p class="text-xs text-slate-400">
+                            Jumlah Barang
+                        </p>
+
+                        <p class="mt-1 font-semibold text-slate-700">
+                            {{ number_format($inventory->quantity, 0, ',', '.') }}
+                        </p>
+                    </div>
 
                     <div class="rounded-xl bg-slate-50 p-4">
 

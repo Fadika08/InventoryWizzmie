@@ -19,7 +19,7 @@ class SuperAdminSeeder extends Seeder
             [
                 'email' => env(
                     'SUPER_ADMIN_EMAIL',
-                    'itsupport@wizzmie.com'
+                    'it.support@wizzmie.com'
                 ),
             ],
             [

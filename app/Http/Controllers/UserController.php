@@ -125,7 +125,7 @@ class UserController extends Controller
 
     public function store(
     UserRequest $request
-): RedirectResponse {
+    ): RedirectResponse {
 
     $role = Role::findOrFail(
         $request->role_id
@@ -137,6 +137,13 @@ class UserController extends Controller
     if ($role->name === 'ho_admin') {
 
         $departmentId =
+            $request->department_id;
+
+    }
+
+    if ($role->name === 'dbl_admin') {
+
+        $department_id =
             $request->department_id;
 
     }
@@ -254,6 +261,13 @@ public function update(
     $outletId = null;
 
     if ($role->name === 'ho_admin') {
+
+        $departmentId =
+            $request->department_id;
+
+    }
+
+    if ($role->name === 'dbl_admin') {
 
         $departmentId =
             $request->department_id;

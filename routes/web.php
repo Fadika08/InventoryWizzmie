@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::middleware('role:super_admin,ho_admin')
+    Route::middleware('role:super_admin,ho_admin,dbl_admin')
     ->group(function () {
 
         Route::get(

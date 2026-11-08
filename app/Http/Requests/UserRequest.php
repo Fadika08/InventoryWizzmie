@@ -53,6 +53,25 @@ class UserRequest extends FormRequest
 
                 }),
             ],
+            
+            'department_id' => [
+                'nullable',
+                'exists:departments,id',
+
+                Rule::requiredIf(function () {
+
+                    return Role::where(
+                        'id',
+                        $this->input('role_id')
+                    )
+                    ->where(
+                        'name',
+                        'dbl_admin'
+                    )
+                    ->exists();
+
+                }),
+            ],
 
             'outlet_id' => [
                 'nullable',

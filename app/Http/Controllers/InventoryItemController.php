@@ -174,6 +174,25 @@ public function create(Request $request): View
 
     /*
     |--------------------------------------------------------------------------
+    | DBL Admin
+    | Hanya boleh membuat inventory Head Office
+    |--------------------------------------------------------------------------
+    */
+
+    elseif ($user->isDblAdmin()) {
+
+        $departments = Department::query()
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get([
+                'id',
+                'code',
+                'name',
+            ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | Outlet Admin
     | Hanya boleh membuat inventory di outlet sendiri
     |--------------------------------------------------------------------------
@@ -266,7 +285,14 @@ if ($user->isOutletAdmin()) {
 
     $outletId = null;
 
-} else {
+}
+    elseif ($user->isDblAdmin()) {
+        $locationType = 'dbl';
+        $departmentId = $request->department_id;
+        $roomId = $request->room_id;
+        $outletId = null;
+        }
+else {
 
     // Super Admin
     $locationType = $request->location_type;
@@ -278,6 +304,16 @@ if ($user->isOutletAdmin()) {
 
     $roomId =
         $locationType === 'head_office'
+            ? $request->room_id
+            : null;
+
+    $departmentId =
+        $locationType === 'dbl'
+            ? $request->department_id
+            : null;
+
+    $roomId =
+        $locationType === 'dbl'
             ? $request->room_id
             : null;
 
@@ -312,6 +348,8 @@ $inventory = DB::transaction(function () use (
             'barcode' => 'TEMP-' . str()->uuid(),
 
             'name' => $request->name,
+
+            'quantity' => (int) $request->validated('quantity'),
 
             'category_id' => $request->category_id,
 
@@ -588,7 +626,16 @@ $inventory = DB::transaction(function () use (
 
         $outletId = null;
 
-    } else {
+    }
+
+    elseif ($user->isDblAdmin()) {
+        $locationType = 'dbl';
+        $departmentId = $request->department_id;
+        $roomId = $request->room_id;
+        $outletId = null;
+    }
+
+    else {
 
         $locationType = $request->location_type;
 
@@ -601,7 +648,14 @@ $inventory = DB::transaction(function () use (
             $locationType === 'head_office'
                 ? $request->room_id
                 : null;
-
+        $departmentId =
+            $locationType === 'dbl'
+                ? $request->department_id
+                : null;
+        $roomId =
+            $locationType === 'dbl'
+                ? $request->room_id
+                : null;
         $outletId =
             $locationType === 'outlet'
                 ? $request->outlet_id
@@ -611,6 +665,9 @@ $inventory = DB::transaction(function () use (
 
         'name' =>
             $request->name,
+
+        'quantity' =>
+            (int) $request->validated('quantity'),
 
         'category_id' =>
             $request->category_id,

@@ -13,6 +13,7 @@ class RoomRequest extends FormRequest
             && (
                 auth()->user()->isSuperAdmin()
                 || auth()->user()->isHoAdmin()
+                || auth()->user()->isDblAdmin()
             );
     }
 

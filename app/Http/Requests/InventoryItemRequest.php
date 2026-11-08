@@ -34,6 +34,13 @@ class InventoryItemRequest extends FormRequest
                 'exists:categories,id',
             ],
 
+            'quantity' => [
+                'required',
+                'integer',
+                'min:0',
+                'max:4294967295',
+            ],
+
             'brand' => [
                 'nullable',
                 'string',
@@ -65,6 +72,7 @@ class InventoryItemRequest extends FormRequest
                 'required',
                 Rule::in([
                     'head_office',
+                    'dbl',
                     'outlet',
                 ]),
             ],
@@ -182,6 +190,49 @@ class InventoryItemRequest extends FormRequest
             */
 
             if ($this->location_type === 'head_office') {
+
+                if (!$this->department_id) {
+                    $validator->errors()->add(
+                        'department_id',
+                        'Divisi wajib dipilih.'
+                    );
+                }
+
+                if (!$this->room_id) {
+                    $validator->errors()->add(
+                        'room_id',
+                        'Ruangan wajib dipilih.'
+                    );
+                }
+
+                if ($this->outlet_id) {
+                    $validator->errors()->add(
+                        'outlet_id',
+                        'Inventaris Head Office tidak boleh memiliki outlet.'
+                    );
+                }
+
+                if ($this->room_id && $this->department_id) {
+
+                    $roomBelongsToDepartment =
+                        \App\Models\Room::query()
+                            ->whereKey($this->room_id)
+                            ->where(
+                                'department_id',
+                                $this->department_id
+                            )
+                            ->exists();
+
+                    if (!$roomBelongsToDepartment) {
+                        $validator->errors()->add(
+                            'room_id',
+                            'Ruangan tidak sesuai dengan divisi yang dipilih.'
+                        );
+                    }
+                }
+            }
+
+            if ($this->location_type === 'dbl') {
 
                 if (!$this->department_id) {
                     $validator->errors()->add(

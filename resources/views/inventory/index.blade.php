@@ -114,6 +114,10 @@
 
                         </option>
 
+                        <option value="dbl" @selected(request('location_type') === 'dbl')>
+
+                            DBL Office
+
                         <option value="outlet" @selected(request('location_type') === 'outlet')>
 
                             Outlet
@@ -204,6 +208,10 @@
                                 Barang
                             </th>
 
+                            <th class="px-5 py-4 text-right text-xs font-bold uppercase text-slate-500">
+                                Jumlah
+                            </th>
+
                             <th class="px-5 py-4 text-left text-xs font-bold uppercase text-slate-500">
                                 Kategori
                             </th>
@@ -270,7 +278,10 @@
 
                                 </td>
 
-
+                                {{-- Quantity --}}
+                                <td class="px-5 py-4 text-right font-semibold text-slate-700">
+                                    {{ number_format($inventory->quantity, 0, ',', '.') }}
+                                </td>
                                 {{-- Category --}}
                                 <td class="px-5 py-4">
 
@@ -296,9 +307,18 @@
                                             @if ($inventory->room)
                                                 · {{ $inventory->room->name }}
                                             @endif
-
+                                        @elseif ($inventory->location_type === 'dbl')
+                                        <p class="text-sm font-semibold text-slate-700">
+                                            DBL Office
                                         </p>
-                                    @else
+                                        <p class="text-xs text-slate-400">
+
+                                            {{ $inventory->department?->name }}
+
+                                            @if ($inventory->room)
+                                                · {{ $inventory->room->name }}
+                                            @endif
+                                        @else
                                         <p class="text-sm font-semibold text-slate-700">
                                             {{ $inventory->outlet?->name ?? '-' }}
                                         </p>
@@ -406,7 +426,7 @@
 
                             <tr>
 
-                                <td colspan="7" class="px-5 py-16 text-center">
+                                <td colspan="8" class="px-5 py-16 text-center">
 
                                     <p class="font-semibold text-slate-700">
                                         Belum ada inventaris

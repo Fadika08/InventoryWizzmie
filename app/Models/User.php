@@ -199,6 +199,11 @@ class User extends Authenticatable
         return $this->hasRole('ho_admin');
     }
 
+    public function isDblAdmin(): bool
+    {
+        return $this->hasRole('dbl_admin');
+    }
+
     public function isOutletAdmin(): bool
     {
         return $this->hasRole('outlet_admin');

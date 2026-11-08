@@ -14,6 +14,7 @@ class DepartmentRequest extends FormRequest
             && (
                 auth()->user()->isSuperAdmin()
                 || auth()->user()->isHoAdmin()
+                || auth()->user()->isDblAdmin()
             );
     }
 

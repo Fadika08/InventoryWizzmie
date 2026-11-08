@@ -450,6 +450,21 @@
 
                         department.value = '';
 
+                    } else if (role === 'dbl_admin') {
+
+                        departmentWrapper.classList.remove(
+                            'hidden'
+                        );
+
+                        outletWrapper.classList.add(
+                            'hidden'
+                        );
+
+                        department.disabled = false;
+                        outlet.disabled = true;
+
+                        outlet.value = '';
+
                     } else {
 
                         departmentWrapper.classList.add(

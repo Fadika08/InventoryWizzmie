@@ -218,6 +218,16 @@
                 <div class="grid gap-x-8 gap-y-6 sm:grid-cols-2">
 
                     <div>
+                        <p class="text-xs font-medium text-slate-400">
+                            Jumlah Barang
+                        </p>
+
+                        <p class="mt-1 text-sm font-semibold text-slate-700">
+                            {{ number_format($inventory->quantity, 0, ',', '.') }}
+                        </p>
+                    </div>
+
+                    <div>
 
                         <p class="text-xs font-medium text-slate-400">
                             Serial Number
@@ -275,6 +285,8 @@
 
                             @if ($inventory->location_type === 'head_office')
                                 Head Office
+                            @elseif ($inventory->location_type === 'dbl')
+                                DBL Office
                             @else
                                 Outlet
                             @endif
@@ -355,6 +367,39 @@
                             {{ $inventory->room?->name ?? '-' }}
                         </p>
 
+                    </div>
+                @elseif ($inventory->location_type === 'dbl')
+                    <div class="rounded-xl bg-slate-50 p-4">
+
+                        <p class="text-xs text-slate-400">
+                            Lokasi
+                        </p>
+
+                        <p class="mt-1 font-semibold text-slate-700">
+                            DBL Office
+                        </p>
+
+                    </div>
+                    <div class="rounded-xl bg-slate-50 p-4">
+
+                        <p class="text-xs text-slate-400">
+                            Divisi
+                        </p>
+
+                        <p class="mt-1 font-semibold text-slate-700">
+                            {{ $inventory->department?->name ?? '-' }}
+                        </p>
+                    </div>
+
+                    <div class="rounded-xl bg-slate-50 p-4">
+
+                        <p class="text-xs text-slate-400">
+                            Ruangan
+                        </p>
+
+                        <p class="mt-1 font-semibold text-slate-700">
+                            {{ $inventory->room?->name ?? '-' }}
+                        </p>
                     </div>
                 @else
                     <div class="rounded-xl bg-slate-50 p-4 md:col-span-3">

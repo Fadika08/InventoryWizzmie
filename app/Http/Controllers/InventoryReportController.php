@@ -179,6 +179,13 @@ class InventoryReportController extends Controller
                 )
                 ->count(),
 
+            'dbl' => (clone $statisticsQuery)
+                ->where(
+                    'inventory_items.location_type',
+                    'dbl'
+                )
+                ->count(),
+
             'outlet' => (clone $statisticsQuery)
                 ->where(
                     'inventory_items.location_type',

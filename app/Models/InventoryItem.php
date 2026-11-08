@@ -16,6 +16,7 @@ class InventoryItem extends Model
         'public_code',
         'barcode',
         'name',
+        'quantity',
         'category_id',
         'brand',
         'model',
@@ -40,10 +41,15 @@ class InventoryItem extends Model
     protected $casts = [
         'public_code' => 'string',
         'purchase_date' => 'date',
+        'quantity' => 'integer',
         'warranty_start' => 'date',
         'warranty_end' => 'date',
         'purchase_price' => 'decimal:2',
     ];
+
+    protected $attributes = [
+    'quantity' => 1,
+];
 
     /**
      * Kategori.
@@ -152,6 +158,14 @@ class InventoryItem extends Model
             'head_office'
         );
     }
+
+    if ($user->isDblAdmin()) {
+        return $query->where(
+            'location_type',
+            'dbl'
+        );
+    }
+
 
     if ($user->isOutletAdmin()) {
         return $query
