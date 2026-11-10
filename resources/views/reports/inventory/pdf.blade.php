@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
-
     <meta charset="UTF-8">
-
     <title>Report Inventaris</title>
 
     <style>
-
         @page {
             margin: 25px 20px;
         }
@@ -38,13 +35,14 @@
 
         .summary {
             width: 100%;
-            margin-bottom: 15px;
+            table-layout: fixed;
+            border-collapse: collapse;
+            margin-bottom: 12px;
         }
 
         .summary td {
-            width: 20%;
             border: 1px solid #e2e8f0;
-            padding: 7px;
+            padding: 7px 4px;
             text-align: center;
         }
 
@@ -59,8 +57,18 @@
             margin-top: 3px;
         }
 
+        .quantity-summary {
+            padding: 8px;
+            margin-bottom: 15px;
+            background: #faf5ff;
+            border: 1px solid #e9d5ff;
+            font-size: 10px;
+            color: #8F348E;
+        }
+
         .filters {
             width: 100%;
+            border-collapse: collapse;
             margin-bottom: 15px;
         }
 
@@ -76,7 +84,12 @@
 
         table.report {
             width: 100%;
+            table-layout: fixed;
             border-collapse: collapse;
+        }
+
+        table.report thead {
+            display: table-header-group;
         }
 
         table.report th {
@@ -92,14 +105,29 @@
             border: 1px solid #d1d5db;
             padding: 5px 4px;
             font-size: 7px;
+            vertical-align: top;
+            word-wrap: break-word;
         }
 
-        table.report tr:nth-child(even) td {
+        table.report tbody tr:nth-child(even) td {
             background: #f8fafc;
+        }
+
+        table.report tr {
+            page-break-inside: avoid;
+        }
+
+        table.report tbody tr.total-row td {
+            background: #f1f5f9;
+            font-weight: bold;
         }
 
         .center {
             text-align: center;
+        }
+
+        .right {
+            text-align: right;
         }
 
         .footer {
@@ -108,276 +136,199 @@
             font-size: 7px;
             color: #64748b;
         }
-
     </style>
-
 </head>
 
 <body>
+    @php
+        $totalQuantity = $items->sum('quantity');
 
+        $summaryCards = [
+            'TOTAL DATA' => $statistics['total'],
+            'HEAD OFFICE' => $statistics['head_office'],
+            'DBL' => $statistics['dbl'],
+            'OUTLET' => $statistics['outlet'],
+            'KONDISI BAIK' => $statistics['baik'],
+            'KONDISI RUSAK' => $statistics['rusak'],
+        ];
 
-<div class="header">
+        $conditionLabels = [
+            'good' => 'Baik',
+            'minor_damage' => 'Rusak Ringan',
+            'damaged' => 'Rusak',
+            'lost' => 'Hilang',
+        ];
 
-    <div class="title">
-        WIZZMiE INVENTORY SYSTEM
+        $statusLabels = [
+            'active' => 'Aktif',
+            'maintenance' => 'Maintenance',
+            'borrowed' => 'Dipinjam',
+            'lost' => 'Hilang',
+            'disposed' => 'Dihapus',
+        ];
+    @endphp
+
+    <div class="header">
+        <div class="title">
+            WIZZMiE INVENTORY SYSTEM
+        </div>
+
+        <div class="subtitle">
+            REPORT INVENTARIS
+        </div>
     </div>
 
-    <div class="subtitle">
-        REPORT INVENTARIS
-    </div>
-
-</div>
-
-
-<table class="summary">
-
-    <tr>
-
-        <td>
-
-            <div class="summary-title">
-                TOTAL
-            </div>
-
-            <div class="summary-value">
-                {{ number_format($statistics['total']) }}
-            </div>
-
-        </td>
-
-
-        <td>
-
-            <div class="summary-title">
-                HEAD OFFICE
-            </div>
-
-            <div class="summary-value">
-                {{ number_format($statistics['head_office']) }}
-            </div>
-
-        </td>
-
-
-        <td>
-
-            <div class="summary-title">
-                OUTLET
-            </div>
-
-            <div class="summary-value">
-                {{ number_format($statistics['outlet']) }}
-            </div>
-
-        </td>
-
-
-        <td>
-
-            <div class="summary-title">
-                KONDISI BAIK
-            </div>
-
-            <div class="summary-value">
-                {{ number_format($statistics['baik']) }}
-            </div>
-
-        </td>
-
-
-        <td>
-
-            <div class="summary-title">
-                KONDISI RUSAK
-            </div>
-
-            <div class="summary-value">
-                {{ number_format($statistics['rusak']) }}
-            </div>
-
-        </td>
-
-    </tr>
-
-</table>
-
-
-<table class="filters">
-
-    <tr>
-
-        <td class="filter-label">
-            Periode
-        </td>
-
-        <td>
-            {{ $filters['date_from'] }}
-            -
-            {{ $filters['date_to'] }}
-        </td>
-
-        <td class="filter-label">
-            Lokasi
-        </td>
-
-        <td>
-            {{ $filters['location'] }}
-        </td>
-
-    </tr>
-
-
-    <tr>
-
-        <td class="filter-label">
-            Pencarian
-        </td>
-
-        <td colspan="3">
-            {{ $filters['search'] }}
-        </td>
-
-    </tr>
-
-</table>
-
-
-<table class="report">
-
-    <thead>
-
+    <table class="summary">
         <tr>
+            @foreach ($summaryCards as $label => $value)
+                <td>
+                    <div class="summary-title">
+                        {{ $label }}
+                    </div>
 
-            <th width="4%">
-                No
-            </th>
+                    <div class="summary-value">
+                        {{ number_format($value, 0, ',', '.') }}
+                    </div>
+                </td>
+            @endforeach
+        </tr>
+    </table>
 
-            <th width="10%">
-                Kode
-            </th>
+    <div class="quantity-summary">
+        <strong>Total Jumlah Barang:</strong>
+        {{ number_format($totalQuantity, 0, ',', '.') }}
+    </div>
 
-            <th width="14%">
-                Nama
-            </th>
+    <table class="filters">
+        <tr>
+            <td class="filter-label">Periode</td>
 
-            <th width="9%">
-                Kategori
-            </th>
+            <td>
+                {{ $filters['date_from'] }}
+                -
+                {{ $filters['date_to'] }}
+            </td>
 
-            <th width="10%">
-                Brand / Model
-            </th>
+            <td class="filter-label">Lokasi</td>
 
-            <th width="10%">
-                Serial Number
-            </th>
-
-            <th width="12%">
-                Lokasi
-            </th>
-
-            <th width="9%">
-                Divisi
-            </th>
-
-            <th width="7%">
-                Kondisi
-            </th>
-
-            <th width="7%">
-                Status
-            </th>
-
-            <th width="8%">
-                Pembelian
-            </th>
-
+            <td>
+                {{ $filters['location'] }}
+            </td>
         </tr>
 
-    </thead>
+        <tr>
+            <td class="filter-label">Pencarian</td>
 
+            <td colspan="3">
+                {{ $filters['search'] }}
+            </td>
+        </tr>
+    </table>
 
-    <tbody>
-
-        @foreach($items as $index => $item)
-
+    <table class="report">
+        <thead>
             <tr>
-
-                <td class="center">
-                    {{ $index + 1 }}
-                </td>
-
-                <td>
-                    {{ $item->inventory_code }}
-                </td>
-
-                <td>
-                    {{ $item->name }}
-                </td>
-
-                <td>
-                    {{ $item->category?->name ?? '-' }}
-                </td>
-
-                <td>
-                    {{ trim(($item->brand ?? '') . ' ' . ($item->model ?? '')) ?: '-' }}
-                </td>
-
-                <td>
-                    {{ $item->serial_number ?: '-' }}
-                </td>
-
-                <td>
-
-                    @if($item->location_type === 'head_office')
-
-                        Head Office
-
-                        @if($item->room)
-                            - {{ $item->room->name }}
-                        @endif
-
-                    @else
-
-                        {{ $item->outlet?->name ?? 'Outlet' }}
-
-                    @endif
-
-                </td>
-
-                <td>
-                    {{ $item->department?->name ?? '-' }}
-                </td>
-
-                <td class="center">
-                    {{ ucfirst($item->condition_status ?? '-') }}
-                </td>
-
-                <td class="center">
-                    {{ ucfirst($item->status ?? '-') }}
-                </td>
-
-                <td class="center">
-                    {{ $item->purchase_date?->format('d/m/Y') ?? '-' }}
-                </td>
-
+                <th width="3%">No</th>
+                <th width="10%">Kode</th>
+                <th width="12%">Nama</th>
+                <th width="6%">Jumlah</th>
+                <th width="8%">Kategori</th>
+                <th width="9%">Brand / Model</th>
+                <th width="10%">Serial Number</th>
+                <th width="11%">Lokasi</th>
+                <th width="9%">Divisi</th>
+                <th width="7%">Kondisi</th>
+                <th width="7%">Status</th>
+                <th width="8%">Pembelian</th>
             </tr>
+        </thead>
 
-        @endforeach
+        <tbody>
+            @forelse ($items as $item)
+                <tr>
+                    <td class="center">
+                        {{ $loop->iteration }}
+                    </td>
 
-    </tbody>
+                    <td>
+                        {{ $item->inventory_code }}
+                    </td>
 
-</table>
+                    <td>
+                        {{ $item->name }}
+                    </td>
 
+                    <td class="right">
+                        {{ number_format($item->quantity, 0, ',', '.') }}
+                    </td>
 
-<div class="footer">
+                    <td>
+                        {{ $item->category?->name ?? '-' }}
+                    </td>
 
-    Dicetak:
-    {{ now()->format('d/m/Y H:i') }}
+                    <td>
+                        {{ trim(($item->brand ?? '') . ' ' . ($item->model ?? '')) ?: '-' }}
+                    </td>
 
-</div>
+                    <td>
+                        {{ $item->serial_number ?: '-' }}
+                    </td>
 
+                    <td>
+                        @if (in_array($item->location_type, ['head_office', 'dbl'], true))
+                            {{ $item->location_type === 'dbl' ? 'DBL' : 'Head Office' }}
 
+                            @if ($item->room)
+                                - {{ $item->room->name }}
+                            @endif
+                        @elseif ($item->location_type === 'outlet')
+                            {{ $item->outlet?->name ?? 'Outlet' }}
+                        @else
+                            {{ $item->location_type ?? '-' }}
+                        @endif
+                    </td>
+
+                    <td>
+                        {{ $item->department?->name ?? '-' }}
+                    </td>
+
+                    <td class="center">
+                        {{ $conditionLabels[$item->condition_status] ?? ($item->condition_status ?? '-') }}
+                    </td>
+
+                    <td class="center">
+                        {{ $statusLabels[$item->status] ?? ($item->status ?? '-') }}
+                    </td>
+
+                    <td class="center">
+                        {{ $item->purchase_date?->format('d/m/Y') ?? '-' }}
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="12" class="center">
+                        Tidak ada data inventaris berdasarkan filter.
+                    </td>
+                </tr>
+            @endforelse
+
+            <tr class="total-row">
+                <td colspan="3">
+                    Total Jumlah Barang
+                </td>
+
+                <td class="right">
+                    {{ number_format($totalQuantity, 0, ',', '.') }}
+                </td>
+
+                <td colspan="8"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Dicetak: {{ now()->format('d/m/Y H:i') }}
+    </div>
 </body>
 
 </html>

@@ -15,7 +15,7 @@ class CategoryController extends Controller
         $search = $request->input('search');
 
         $categories = Category::query()
-            ->withCount('inventoryItems')
+            ->withSum('inventoryItems as total_quantity', 'quantity')
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
                     $query->where(

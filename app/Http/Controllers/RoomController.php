@@ -21,7 +21,7 @@ class RoomController extends Controller
 
         $rooms = Room::query()
             ->with('department:id,code,name')
-            ->withCount('inventoryItems')
+            ->withSum('inventoryItems as total_quantity', 'quantity')
 
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {

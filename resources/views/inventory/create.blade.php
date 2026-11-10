@@ -391,91 +391,83 @@
 
                         </div>
 
+                        {{-- DBL --}}
+                        <div id="dbl-fields" class="mt-6 grid gap-5 md:grid-cols-2">
 
-                        <div>
+                            <div>
 
-                            <label for="room_id" class="mb-2 block text-sm font-semibold text-slate-700">
+                                <label for="department_id" class="mb-2 block text-sm font-semibold text-slate-700">
 
-                                Ruangan *
+                                    Divisi *
 
-                            </label>
+                                </label>
 
-                            <select id="room_id" name="room_id"
-                                class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
+                                <select id="department_id" name="department_id"
+                                    class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
 
-                                <option value="">
-                                    Pilih divisi terlebih dahulu
-                                </option>
+                                    <option value="">
+                                        Pilih Divisi
+                                    </option>
 
-                            </select>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}" @selected(old('department_id') == $department->id)>
+
+                                            {{ $department->code }}
+                                            -
+                                            {{ $department->name }}
+
+                                        </option>
+                                    @endforeach
+
+                                </select>
+
+                            </div>
+
+                            <div>
+
+                                <label for="room_id" class="mb-2 block text-sm font-semibold text-slate-700">
+
+                                    Ruangan *
+
+                                </label>
+
+                                <select id="room_id" name="room_id"
+                                    class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
+
+                                    <option value="">
+                                        Pilih divisi terlebih dahulu
+                                    </option>
+
+                                </select>
+
+                            </div>
 
                         </div>
 
-                    </div>
 
+                        {{-- Outlet --}}
+                        <div id="outlet-fields" class="mt-6 hidden">
 
-                    {{-- Outlet --}}
-                    <div id="outlet-fields" class="mt-6 hidden">
+                            <label for="outlet_id" class="mb-2 block text-sm font-semibold text-slate-700">
 
-                        <label for="outlet_id" class="mb-2 block text-sm font-semibold text-slate-700">
-
-                            Outlet *
-
-                        </label>
-
-
-                        <select id="outlet_id" name="outlet_id"
-                            class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
-
-                            <option value="">
-                                Pilih Outlet
-                            </option>
-
-                            @foreach ($outlets as $outlet)
-                                <option value="{{ $outlet->id }}" @selected(old('outlet_id') == $outlet->id)>
-
-                                    {{ $outlet->code }}
-                                    -
-                                    {{ $outlet->name }}
-
-                                </option>
-                            @endforeach
-
-                        </select>
-
-                    </div>
-
-
-                    {{-- ===================================================== --}}
-                    {{-- HO ADMIN --}}
-                    {{-- ===================================================== --}}
-                @elseif(auth()->user()->isHoAdmin())
-                    <input type="hidden" name="location_type" value="head_office">
-
-
-                    <div class="mt-6 grid gap-5 md:grid-cols-2">
-
-                        <div>
-
-                            <label for="department_id" class="mb-2 block text-sm font-semibold text-slate-700">
-
-                                Divisi *
+                                Outlet *
 
                             </label>
 
-                            <select id="department_id" name="department_id" required
+
+                            <select id="outlet_id" name="outlet_id"
                                 class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
 
                                 <option value="">
-                                    Pilih Divisi
+                                    Pilih Outlet
                                 </option>
 
-                                @foreach ($departments as $department)
-                                    <option value="{{ $department->id }}" @selected(old('department_id') == $department->id)>
+                                @foreach ($outlets as $outlet)
+                                    <option value="{{ $outlet->id }}" @selected(old('outlet_id') == $outlet->id)>
 
-                                        {{ $department->code }}
+                                        {{ $outlet->code }}
                                         -
-                                        {{ $department->name }}
+                                        {{ $outlet->name }}
 
                                     </option>
                                 @endforeach
@@ -483,28 +475,118 @@
                             </select>
 
                         </div>
+                    @elseif (auth()->user()->isDblAdmin())
+                        <input type="hidden" name="location_type" value="dbl">
 
+                        <div class="mt-6 grid gap-5 md:grid-cols-2">
 
-                        <div>
+                            <div>
 
-                            <label for="room_id" class="mb-2 block text-sm font-semibold text-slate-700">
+                                <label for="department_id" class="mb-2 block text-sm font-semibold text-slate-700">
 
-                                Ruangan *
+                                    Divisi *
 
-                            </label>
+                                </label>
 
-                            <select id="room_id" name="room_id" required
-                                class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
+                                <select id="department_id" name="department_id" required
+                                    class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
 
-                                <option value="">
-                                    Pilih divisi terlebih dahulu
-                                </option>
+                                    <option value="">
+                                        Pilih Divisi
+                                    </option>
 
-                            </select>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}" @selected(old('department_id') == $department->id)>
 
+                                            {{ $department->code }}
+                                            -
+                                            {{ $department->name }}
+
+                                        </option>
+                                    @endforeach
+
+                                </select>
+
+                            </div>
+                            <div>
+
+                                <label for="room_id" class="mb-2 block text-sm font-semibold text-slate-700">
+
+                                    Ruangan *
+
+                                </label>
+
+                                <select id="room_id" name="room_id" required
+                                    class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
+
+                                    <option value="">
+                                        Pilih divisi terlebih dahulu
+                                    </option>
+
+                                </select>
+                            </div>
                         </div>
 
-                    </div>
+
+                        {{-- ===================================================== --}}
+                        {{-- HO ADMIN --}}
+                        {{-- ===================================================== --}}
+                    @elseif(auth()->user()->isHoAdmin())
+                        <input type="hidden" name="location_type" value="head_office">
+
+
+                        <div class="mt-6 grid gap-5 md:grid-cols-2">
+
+                            <div>
+
+                                <label for="department_id" class="mb-2 block text-sm font-semibold text-slate-700">
+
+                                    Divisi *
+
+                                </label>
+
+                                <select id="department_id" name="department_id" required
+                                    class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
+
+                                    <option value="">
+                                        Pilih Divisi
+                                    </option>
+
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}" @selected(old('department_id') == $department->id)>
+
+                                            {{ $department->code }}
+                                            -
+                                            {{ $department->name }}
+
+                                        </option>
+                                    @endforeach
+
+                                </select>
+
+                            </div>
+
+
+                            <div>
+
+                                <label for="room_id" class="mb-2 block text-sm font-semibold text-slate-700">
+
+                                    Ruangan *
+
+                                </label>
+
+                                <select id="room_id" name="room_id" required
+                                    class="w-full rounded-xl border-slate-200 focus:border-[#8F348E] focus:ring-[#8F348E]">
+
+                                    <option value="">
+                                        Pilih divisi terlebih dahulu
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
 
                 @endif
 

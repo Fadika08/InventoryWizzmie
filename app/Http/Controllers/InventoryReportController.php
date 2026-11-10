@@ -77,10 +77,20 @@ class InventoryReportController extends Controller
         $statistics = [
             'total' => (clone $statisticsQuery)->count(),
 
+            'total_quantity' => (int) (clone $statisticsQuery)
+            ->sum('inventory_items.quantity'),
+
             'head_office' => (clone $statisticsQuery)
                 ->where(
                     'inventory_items.location_type',
                     'head_office'
+                )
+                ->count(),
+
+            'dbl' => (clone $statisticsQuery)
+                ->where(
+                    'inventory_items.location_type',
+                    'dbl'
                 )
                 ->count(),
 
@@ -296,6 +306,7 @@ class InventoryReportController extends Controller
                     [
                         'head_office',
                         'outlet',
+                        'dbl',
                     ],
                     true
                 )

@@ -191,7 +191,7 @@
                                 </td>
 
                                 <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600">
-                                    {{ number_format($room->inventory_items_count) }}
+                                    {{ number_format($room->total_quantity ?? 0, 0, ',', '.') }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-5 py-4">

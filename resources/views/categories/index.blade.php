@@ -133,7 +133,7 @@
                                 </td>
 
                                 <td class="px-5 py-4 text-sm text-slate-600">
-                                    {{ number_format($category->inventory_items_count) }}
+                                    {{ number_format($category->total_quantity ?? 0, 0, ',', '.') }}
                                 </td>
 
                                 <td class="px-5 py-4">

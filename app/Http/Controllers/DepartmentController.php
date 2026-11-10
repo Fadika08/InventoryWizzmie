@@ -20,8 +20,7 @@ class DepartmentController extends Controller
         $departments = Department::query()
             ->withCount('users')
             ->withCount('rooms')
-            ->withCount('inventoryItems')
-            ->when($search, function ($query) use ($search) {
+            ->withCount('inventoryItems')->withSum('inventoryItems as total_quantity', 'quantity')->when($search, function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('code', 'like', "%{$search}%")
                         ->orWhere('name', 'like', "%{$search}%");
